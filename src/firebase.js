@@ -1,13 +1,13 @@
 import firebase from 'firebase'
 
 const firebaseConfig = {
-    apiKey: "AIzaSyApRpM6xCb3WO98cz3BFxZW79qFHUUqhTg",
-    authDomain: "video-platform-a9b33.firebaseapp.com",
-    projectId: "video-platform-a9b33",
-    storageBucket: "video-platform-a9b33.appspot.com",
-    messagingSenderId: "111460749880",
-    appId: "1:111460749880:web:90d4d21f8341a862c3cccd"
-  };
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
+};
 
   firebase.initializeApp(firebaseConfig)
   const storage = firebase.storage()
