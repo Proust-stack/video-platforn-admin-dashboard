@@ -6,15 +6,15 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import UserList from "./pages/userList/UserList";
 import User from "./pages/user/User";
 import NewUser from "./pages/newUser/NewUser";
-import ProductList from "./pages/productList/ProductList";
-import Product from "./pages/product/Product";
+import Movies from "./pages/movies/Movies";
+import Product from "./pages/movie/Product";
 import NewList from "./pages/newList/NewList.jsx";
 import Login from "./pages/login/Login";
 import { useContext } from 'react';
 import { AuthContext } from "./context/authContext/AuthContext";
 import MoviesList from "./pages/moviesList/MoviesList";
 import List from "./pages/list/List";
-import NewProduct from "./pages/newProduct/NewProduct";
+import NewProduct from "./pages/newMovie/NewProduct";
 
 function App() {
   const { user } = useContext(AuthContext)
@@ -40,7 +40,7 @@ function App() {
               <NewUser />
             </Route>
             <Route path="/movies">
-              <ProductList />
+              <Movies />
             </Route>
             <Route path="/product/:productId">
               <Product />

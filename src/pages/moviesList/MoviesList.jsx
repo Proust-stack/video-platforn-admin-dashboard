@@ -12,7 +12,9 @@ export default function MoviesList() {
     getLists(dispatch)
 
   }, [dispatch])
+
   const handleDelete = (id) => {
+    console.log(id)
     deleteList(id, dispatch)
   };
 
@@ -28,7 +30,7 @@ export default function MoviesList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={{pathname: "/list/" + params.row._id, list: params.row}}>
+            <Link to={{pathname: "/list/" + params.row._id, list: params.row}} onClick={() => console.log(params.row._id)}>
               <button className="productListEdit">Edit</button>
             </Link>
             <DeleteOutline
@@ -50,6 +52,7 @@ export default function MoviesList() {
         pageSize={10}
         checkboxSelection
         getRowId={(r) => r._id}
+        style={{height: 700}}
       />
     </div>
   );

@@ -5,6 +5,7 @@ import { AuthContextProvider } from './context/authContext/AuthContext';
 import { MoviesListContextProvider } from './context/listContext/MoviesListContext';
 import { MoviesContextProvider } from './context/movieContext/MovieContext';
 
+
 ReactDOM.render(
     <AuthContextProvider>
       <MoviesContextProvider>

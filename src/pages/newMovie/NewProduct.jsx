@@ -3,6 +3,8 @@ import { createMovie } from "../../context/movieContext/apiCalls";
 import { MoviesContext } from "../../context/movieContext/MovieContext";
 import storage from "../../firebase.js"
 import "./newProduct.css";
+import Button from '@material-ui/core/Button';
+import Snack from "../../components/Snack";
 
 export default function NewProduct() {
   const [movie, setMovie] = useState(null)
@@ -11,14 +13,27 @@ export default function NewProduct() {
   const [imgSm, setImgSm] = useState(null)
   const [trailer, setTrailer] = useState(null)
   const [video, setVideo] = useState(null)
+  const [isSnackOpen, setIsSnackOpen] = useState(false);
+  const [message, setMessage] = useState('');
   const [uploaded, setUploaded] = useState(0)
+  const [progress, setProgress] = useState('0')
 
   const { dispatch } = useContext( MoviesContext )
+
+
+  const fieldsOfMovie = [
+    {file: img, label: "img"},
+    {file: imgTitle, label: "imgTitle"},
+    {file: imgSm, label: "imgSm"},
+    {file: trailer, label: "trailer"},
+    {file: video, label: "video"},
+  ]
 
   const handleChange = (e) => {
   const value = e.target.value;
   setMovie({...movie, [e.target.name]: value})
 }
+ 
 
 const upload = (items) => {
   items.forEach(item => {
@@ -27,8 +42,7 @@ const upload = (items) => {
     uploadTask.on(
       "state_changed", 
       (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log(progress);
+        setProgress(((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0) + '% done');
     },
     (err) => {
       console.log(err)
@@ -44,21 +58,22 @@ const upload = (items) => {
     )
   })
 }
-const handleUpload = (e) => {
+
+const handleFirebase =  (e) => {
   e.preventDefault()
-  upload([
-    {file: img, label: "img"},
-    {file: imgTitle, label: "imgTitle"},
-    {file: imgSm, label: "imgSm"},
-    {file: trailer, label: "trailer"},
-    {file: video, label: "video"},
-  ])
+  upload(fieldsOfMovie)
+  if (uploaded === 5) {
+    setMessage('uploaded to firebase, then send to database')
+    setIsSnackOpen(true)
+  }
 }
-const handleSubmit = (e) => {
+const handleMongoBase =  (e) => {
   e.preventDefault()
   createMovie(movie, dispatch)
+  setMessage('The movie has sent to database')
+  setIsSnackOpen(true)
+  setUploaded(0)
 }
-console.log(movie);
   return (
     <div className="newProduct">
       <h1 className="addProductTitle">New movie</h1>
@@ -66,22 +81,27 @@ console.log(movie);
         <div className="addProductItem">
           <label>Image</label>
           <input type="file" id="img"  name="img" onChange={e => setImg(e.target.files[0])}/>
+          <div>{progress}</div>
         </div>
         <div className="addProductItem">
           <label>Trailer</label>
           <input type="file" id="trailer"  name="trailer"  onChange={e => setTrailer(e.target.files[0])}/>
+          <div>{progress}</div>
         </div>
         <div className="addProductItem">
           <label>Video</label>
           <input type="file" id="video"  name="video"  onChange={e => setVideo(e.target.files[0])}/>
+          <div>{progress}</div>
         </div>
         <div className="addProductItem">
           <label>Title Image</label>
           <input type="file" id="imgTitle" name="imgTitle"  onChange={e => setImgTitle(e.target.files[0])}/>
+          <div>{progress}</div>
         </div>
         <div className="addProductItem">
           <label>Thumbnail</label>
           <input type="file" id="imgSm"  name="imgSm" onChange={e => setImgSm(e.target.files[0])}/>
+          <div>{progress}</div>
         </div>
         <div className="addProductItem">
           <label>Title</label>
@@ -110,13 +130,24 @@ console.log(movie);
             <option value="true">Yes</option>
           </select>
         </div>
-        {uploaded === 5 ? 
-        <button className="addProductButton" onClick={handleSubmit}>Create</button>
-        :
-        <button className="addProductButton" onClick={handleUpload}>Upload</button>
-      }
-      <button className="addProductButton" onClick={handleSubmit}>Create</button>
+        <Button  
+        variant="contained" 
+        color="primary" 
+        className="addProductButton" 
+        onClick={handleFirebase}
+        disabled={!!uploaded}
+        >Upload to storage
+        </Button>
+        {uploaded === 5 && 
+          <Button  
+          variant="contained" 
+          color="primary" 
+          className="addProductButton" 
+          onClick={handleMongoBase}
+          >Send to database</Button>
+        }
       </form>
+      <Snack isOpen={isSnackOpen} handleClose={() => setIsSnackOpen(false)} message={message}/>
     </div>
   );
 }

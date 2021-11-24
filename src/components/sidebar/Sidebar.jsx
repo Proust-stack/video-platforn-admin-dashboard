@@ -11,7 +11,7 @@ import {
   ChatBubbleOutline,
   WorkOutline,
   Report,
-  List
+  List,
 } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 //import { List } from "@material-ui/core";
@@ -54,16 +54,18 @@ export default function Sidebar() {
                 Movies
               </li>
             </Link>
+            <Link to="/newproduct" className="link">
+              <li className="sidebarListItem">
+                <PlayCircleOutline className="sidebarIcon" />
+                Add new movie
+              </li>
+            </Link>
             <Link to="/lists" className="link">
             <li className="sidebarListItem">
               <List className="sidebarIcon" />
               Lists
             </li>
             </Link>
-            <li className="sidebarListItem">
-              <BarChart className="sidebarIcon" />
-              Reports
-            </li>
           </ul>
         </div>
         <div className="sidebarMenu">
